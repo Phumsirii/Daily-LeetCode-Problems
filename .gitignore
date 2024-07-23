@@ -1,3 +1,5 @@
 *.exe
 .vscode/
 *secret.py
+*main.dSYM
+*main
