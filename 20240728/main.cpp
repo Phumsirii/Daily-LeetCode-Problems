@@ -18,8 +18,8 @@ public:
     int secondMinimum(int n, vector<vector<int>>& edges, int time, int change) {
         //change is the change of green-red
         priority_queue<timeStamp> pq;
-        int minTime=INT_MAX,secMinTime=INT_MAX;
         vector<vector<int>> neighbors(n);
+        vector<int> freq(n,0),minDist(n,1e9),secMinDist(n,1e9);
         for(const vector<int> &x:edges){
             neighbors[x[0]-1].push_back(x[1]-1);
             neighbors[x[1]-1].push_back(x[0]-1);
@@ -28,28 +28,27 @@ public:
         while(!pq.empty()){
             int arrivaltime=pq.top().time;
             int location=pq.top().location;
+            freq[location]++;
+            if (location==n-1 && freq[location]==2) return arrivaltime;
             pq.pop();
-            if (arrivaltime>=secMinTime) break;
             int waitTime=0;
             if ((arrivaltime/change)%2){
                 waitTime=change-(arrivaltime%change);
             }
             int newArrivingTime=arrivaltime+waitTime+time;
-            if (newArrivingTime>=secMinTime) break;
             //see all neighbors
             for (const int &neighbor:neighbors[location]){
-                if (neighbor == n - 1) {
-                    if (newArrivingTime < minTime) {
-                        secMinTime = minTime;
-                        minTime = newArrivingTime;
-                    } else if (newArrivingTime > minTime && newArrivingTime < secMinTime) {
-                        secMinTime = newArrivingTime;
-                    }
-                }
+                if (freq[neighbor]==2) continue;
+                if (newArrivingTime<minDist[neighbor]){
+                    secMinDist[neighbor]=minDist[neighbor];
+                    minDist[neighbor]=newArrivingTime;
+                }else if (newArrivingTime>minDist[neighbor] && newArrivingTime<secMinDist[neighbor]){
+                    secMinDist[neighbor]=newArrivingTime;
+                }else continue;
                 pq.push(timeStamp(newArrivingTime,neighbor));
             }
         }
-        return secMinTime;
+        return 0;
     }
 };
 int main(){
