@@ -12,6 +12,7 @@ public:
             vector<long long> currentRow(cols);
             vector<long long> leftMax(cols);
             vector<long long> rightMax(cols);
+            //take the prev (needs to  deduct 1 point) or use the current col
             leftMax[0]=prevRow[0];
             for(int i=1;i<cols;++i) leftMax[i]=max(leftMax[i-1]-1,prevRow[i]);
             rightMax[cols-1]=prevRow[cols-1];
