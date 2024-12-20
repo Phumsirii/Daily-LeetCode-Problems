@@ -19,9 +19,9 @@ public:
     TreeNode* reverseOddLevels(TreeNode* root) {
         BFS(root);
         int n = 1;
-        while ((1 << n) - 1 <= tmpVector.size()){
+        while ((1 << n) - 1 < tmpVector.size()){
             int left = (1 << n) - 1;
-            int right = min((1 << (n+1)) - 2,(int)tmpVector.size()-1);
+            int right = (1 << (n+1)) - 2;
             while (left < right){
                 swap(tmpVector[left]->val, tmpVector[right]->val);
                 left++;
